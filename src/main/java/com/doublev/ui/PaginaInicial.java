@@ -38,10 +38,10 @@ public class PaginaInicial extends PageObject {
             .located(By.cssSelector(".exito-header-3-x-minicartContainer"));
 
 
-    public Performable ocultarElemento(String nombreClase) {
-        WebElement elemento = $(By.className(nombreClase));
-        JavascriptExecutor jsExecutor = (JavascriptExecutor) getDriver();
-        jsExecutor.executeScript("arguments[0].style.display='none'", elemento);
-        return null;
-    }
+    public static final Target BOTON_BUSCAR = Target.the("Boton de busqueda")
+            .located(By.cssSelector(".btn-search.bt-search"));
+
+    public static final Target MENSAJE_FINAL = Target.the("Mensaje Final")
+            .located(By.cssSelector(".btn-search.bt-search"));
+
 }

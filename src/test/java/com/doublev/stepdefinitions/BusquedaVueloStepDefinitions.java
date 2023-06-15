@@ -7,6 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
+import org.sikuli.script.ImagePath;
 
 import static com.doublev.tasks.LlenarFormulario.llenarFormulario;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
@@ -14,6 +15,7 @@ import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
 public class BusquedaVueloStepDefinitions extends Configuracion {
 
     public static Logger LOGGER = Logger.getLogger(BusquedaVueloStepDefinitions.class);
+    String newPath = "src/test/resources/images/";
     @Given("Given que estoy en la pagina de wingo")
     public void givenQueEstoyEnLaPaginaDeWingo() {
         try {
@@ -32,6 +34,7 @@ public class BusquedaVueloStepDefinitions extends Configuracion {
     @When("he completado el formulario de busqueda")
     public void heCompletadoElFormularioDeBusqueda() {
         try {
+            ImagePath.setBundlePath(newPath);
             theActorInTheSpotlight().attemptsTo(
                     llenarFormulario()
             );
@@ -50,7 +53,12 @@ public class BusquedaVueloStepDefinitions extends Configuracion {
 
     @Then("se muestran los vuelos disponibles")
     public void seMuestranLosVuelosDisponibles() {
-
+        try {
+            Thread.sleep(10000);
+            quitarDriver();
+        }catch (Exception e){
+            LOGGER.warn(e);
+        }
     }
 
 }
