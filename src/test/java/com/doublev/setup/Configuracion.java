@@ -13,6 +13,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
+
 import static com.google.common.base.StandardSystemProperty.USER_DIR;
 import static com.doublev.util.Log4j.LOG4J_PROPERTIES_FILE_PATH;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorCalled;
@@ -39,7 +41,7 @@ public class Configuracion {
     private void configurarDriver() {
         ChromeOptions co = new ChromeOptions();
         co.addArguments(SWITCHES);
-        co.addArguments(INCOGNITO);
+//        co.addArguments(INCOGNITO);
         co.addArguments(POPUP);
         co.addArguments("--disable-notifications");
         DesiredCapabilities cap=new DesiredCapabilities();
@@ -64,6 +66,22 @@ public class Configuracion {
 
     private void setUplog4j() {
         PropertyConfigurator.configure(USER_DIR.value() + LOG4J_PROPERTIES_FILE_PATH.getValue());
+    }
+
+    protected void switchTab() {
+        webDriver.switchTo().defaultContent();
+        ArrayList<String> tabs2 = new ArrayList<String> (webDriver.getWindowHandles());
+        webDriver.switchTo().window(tabs2.get(0));
+    }
+
+    protected void getTabsList() {
+        ArrayList<String> tabsList = new ArrayList<String> (webDriver.getWindowHandles());
+        System.out.println(tabsList);
+    }
+
+    protected void getCurrentUrl() {
+        String currentUrl = webDriver.getCurrentUrl();
+        System.out.println("URL actual: " + currentUrl);
     }
 
     public static void waitExplicit() {

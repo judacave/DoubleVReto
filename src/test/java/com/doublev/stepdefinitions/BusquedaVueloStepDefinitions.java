@@ -9,8 +9,12 @@ import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.sikuli.script.ImagePath;
 
+import static com.doublev.questions.MensajeFinalBusqueda.mensajeFinalBusqueda;
+import static com.doublev.tasks.BuscarVuelos.buscarVuelos;
 import static com.doublev.tasks.LlenarFormulario.llenarFormulario;
+import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 public class BusquedaVueloStepDefinitions extends Configuracion {
 
@@ -21,44 +25,46 @@ public class BusquedaVueloStepDefinitions extends Configuracion {
         try {
             configurarNavegador();
             LOGGER.info("Inicio de la Automatizacion");
-            theActorInTheSpotlight().wasAbleTo(
-                    new AbrirPaginaInicial()
-            );
-        }catch (Exception e){
-            LOGGER.warn(e.getMessage());
-            Assertions.fail();
-            quitarDriver();
+            theActorInTheSpotlight().wasAbleTo(new AbrirPaginaInicial());
+        } catch (Exception e) {
+            handleException(e);
         }
     }
 
     @When("he completado el formulario de busqueda")
     public void heCompletadoElFormularioDeBusqueda() {
         try {
+            getCurrentUrl();
             ImagePath.setBundlePath(newPath);
-            theActorInTheSpotlight().attemptsTo(
-                    llenarFormulario()
-            );
-
-        }catch (Exception e){
-            LOGGER.warn(e.getMessage());
-            Assertions.fail();
-            quitarDriver();
+            theActorInTheSpotlight().attemptsTo(llenarFormulario());
+        } catch (Exception e) {
+            handleException(e);
         }
     }
 
     @When("he clickeado el boton de busqueda")
     public void heClickeadoElBotonDeBusqueda() {
-
+        try {
+            theActorInTheSpotlight().attemptsTo(buscarVuelos());
+        } catch (Exception e) {
+            handleException(e);
+        }
     }
-
     @Then("se muestran los vuelos disponibles")
     public void seMuestranLosVuelosDisponibles() {
         try {
-            Thread.sleep(10000);
+            theActorInTheSpotlight().should(seeThat(mensajeFinalBusqueda(), equalTo("Buscar")));
+        } catch (Exception e) {
+            handleException(e);
+        } finally {
             quitarDriver();
-        }catch (Exception e){
-            LOGGER.warn(e);
         }
+    }
+
+    private void handleException(Exception e) {
+        LOGGER.warn(e.getMessage());
+        Assertions.fail();
+        quitarDriver();
     }
 
 }
